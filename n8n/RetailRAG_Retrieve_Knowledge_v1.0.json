@@ -1,0 +1,134 @@
+{
+  "name": "RetailRAG — SW — Retrieve Knowledge",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        -528
+      ],
+      "id": "76156d9f-32a5-4ba2-a9f8-48da9fd0221b",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "C1NTbjOZGSoW4lKj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "prompt": "={{ $json.retrieval_query || $json.query }}",
+        "topK": 10,
+        "options": {
+          "queryName": "match_documents",
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "status",
+                "value": "={{ $json.metadata_filter.status }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        -736
+      ],
+      "id": "616a4c1c-cd71-45a6-8525-9f738da0c259",
+      "name": "Retrieve Knowledge",
+      "credentials": {
+        "supabaseApi": {
+          "id": "1HcJuj5XsNImFd5z",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "6af2c691-e3bb-4976-abb4-43ae37a317b1",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -464,
+        -736
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const scope = $json.knowledge_scope ?? 'current_only';\n\nconst allowedScopes = [\n  'current_only',\n  'include_archived'\n];\n\nconst safeScope = allowedScopes.includes(scope)\n  ? scope\n  : 'current_only';\n\nconst metadataFilter =\n  safeScope === 'include_archived'\n    ? {}\n    : { status: 'active' };\n\nreturn {\n  ...$json,\n  knowledge_scope: safeScope,\n  metadata_filter: metadataFilter\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -736
+      ],
+      "id": "5bbcb9bf-5150-44eb-951d-d41057b9747b",
+      "name": "Resolve Knowledge Boundary"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Retrieve Knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Resolve Knowledge Boundary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Knowledge Boundary": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "88381232-8abb-452a-b55a-c290a3d0fe4e",
+  "meta": {
+    "instanceId": "3ff07406eb8a14920e9010b0122e562e19a36374dfe655916709802afa59f4b5"
+  },
+  "nodeGroups": [],
+  "id": "5y5hyFlOjmmT66MD",
+  "tags": []
+}

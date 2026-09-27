@@ -1,0 +1,197 @@
+{
+  "name": "RetailRAG — SW — Write Run Log",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        272,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "jI0ZYcRprqmSjLpu",
+          "mode": "list",
+          "cachedResultName": "RetailRAG_Run_Log",
+          "cachedResultUrl": "/projects/ILqFW0gELSUqDoC5/datatables/jI0ZYcRprqmSjLpu"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "run_id": "={{ $json.run_log.run_id }}",
+            "timestamp": "={{ $json.run_log.timestamp }}",
+            "outcome": "={{ $json.run_log.outcome }}",
+            "case_type": "={{ $json.run_log.case_type }}",
+            "evidence_status": "={{ $json.run_log.evidence_status }}",
+            "security_decision": "={{ $json.run_log.security_decision }}",
+            "source_ids": "={{ $json.run_log.source_ids }}",
+            "validated": "={{ $json.run_log.validated }}",
+            "error_code": "={{ $json.run_log.error_code }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "run_id",
+              "displayName": "run_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "outcome",
+              "displayName": "outcome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "case_type",
+              "displayName": "case_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "security_decision",
+              "displayName": "security_decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "evidence_status",
+              "displayName": "evidence_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source_ids",
+              "displayName": "source_ids",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "validated",
+              "displayName": "validated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "error_code",
+              "displayName": "error_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        352
+      ],
+      "id": "071eccfb-79dc-4895-83e9-7df65e70a3ef",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $('When Executed by Another Workflow').all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        352
+      ],
+      "id": "077a447b-319a-48b3-995c-c15f3321fae7",
+      "name": "Return Original Payload"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Return Original Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e525bd8f-79eb-4145-8fd6-a2a69d66e022",
+  "meta": {
+    "instanceId": "3ff07406eb8a14920e9010b0122e562e19a36374dfe655916709802afa59f4b5"
+  },
+  "nodeGroups": [],
+  "id": "H8y66cQssElDhWH7",
+  "tags": []
+}
